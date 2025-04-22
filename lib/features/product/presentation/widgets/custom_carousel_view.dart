@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:test_task/core/theme/app_palette.dart';
 import 'package:test_task/core/widgets/loader.dart';
 import 'package:test_task/features/product/domain/entities/product.dart';
@@ -24,16 +26,13 @@ class CustomCarouselView extends StatelessWidget {
             color: AppPalette.cardColor,
             borderRadius: BorderRadius.circular(15),
           ),
-          child: Image.network(
-            product.images[index],
+          child: CachedNetworkImage(
+            imageUrl: product.images[index],
             fit: BoxFit.contain,
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) {
-                return child;
-              } else {
-                return Loader();
-              }
+            progressIndicatorBuilder: (context, url, progress) {
+              return Loader(value: progress.progress);
             },
+            errorWidget: (context, url, error) => Icon(Icons.error),
           ),
         ),
         Positioned(

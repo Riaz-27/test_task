@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:test_task/core/theme/app_palette.dart';
@@ -29,16 +30,13 @@ class ProductCardView extends StatelessWidget {
                 topRight: Radius.circular(4),
               ),
             ),
-            child: Image.network(
-              product.thumbnail,
+            child: CachedNetworkImage(
+              imageUrl: product.thumbnail,
               fit: BoxFit.contain,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) {
-                  return child;
-                } else {
-                  return Loader();
-                }
+              progressIndicatorBuilder: (context, url, progress) {
+                return Loader(value: progress.progress);
               },
+              errorWidget: (context, url, error) => Icon(Icons.error),
             ),
           ),
           SizedBox(height: 20),
